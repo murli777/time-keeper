@@ -1,6 +1,6 @@
-const { UnauthenticatedError } = require("../errors");
-const { client } = require("../db/connect");
-const { generateAccessToken } = require("../helpers/generateJWT");
+const { UnauthenticatedError } = require("../../errors");
+const { client } = require("../../db/connect");
+const { generateAccessToken } = require("../../helpers/generateJWT");
 const jwt = require("jsonwebtoken");
 
 const refreshToken = async (req, res, next) => {
@@ -36,6 +36,7 @@ const refreshToken = async (req, res, next) => {
     return next(new UnauthenticatedError("Please login again!"));
   }
   const accessToken = generateAccessToken({
+    userId: user._id.toString(),
     name: user.name,
     email: user.email,
   });

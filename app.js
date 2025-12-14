@@ -6,10 +6,9 @@ const app = express();
 
 const authRouter = require("./routes/auth");
 const refreshRouter = require("./routes/refresh");
-const jobsRouter = require("./routes/jobs");
+const tasksRouter = require("./routes/tasks");
 
 const {
-  credentialValidator,
   authentication,
   errorHandler,
   notFound,
@@ -33,9 +32,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v1/auth", authRouter);
-
 app.use("/api/v1/refresh", refreshRouter);
-app.use("/api/v1/jobs", authentication, jobsRouter);
+
+app.use("/api/v1/tasks", authentication, tasksRouter);
 
 app.use(notFound);
 app.use(errorHandler);

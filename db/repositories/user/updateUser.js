@@ -1,9 +1,8 @@
-const { client } = require("../../connect");
-
-const collection = client.db("jobs").collection("users");
+const { getCollection } = require("../../collectionHelper");
 
 const updateById = async (searchQuery, data) => {
   try {
+    const collection = getCollection("users");
     const result = await collection.findOneAndUpdate(
       { ...searchQuery },
       { $set: data },

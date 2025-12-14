@@ -5,15 +5,15 @@ const authentication = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer")) {
-    return next(new Unauthorised("Please provide the authorization token"));
+    return next(new UnauthenticatedError("Please provide the authorization token"));
   }
 
   const bearerToken = authHeader.split(" ")[1];
   try {
     const payload = jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET);
-    const { name, email } = payload;
+    const { userId, name, email } = payload;
 
-    req.user = { email, name };
+    req.user = { userId, email, name };
     next();
   } catch (error) {
     if (error.message === "jwt expired") {

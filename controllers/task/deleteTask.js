@@ -1,0 +1,44 @@
+const { NotFoundError, CustomAPIError } = require("../../errors");
+const {
+  getTaskById: getTaskByIdRepo,
+  deleteTask: deleteTaskRepo,
+} = require("../../db/repositories/task");
+const isValidObjectId = require("../../helpers/isValidObjectId");
+
+const deleteTask = async (req, res, next) => {
+  const { taskId } = req.params;
+
+  const { userId } = req.user;
+
+  try {
+    const validTaskId = isValidObjectId(taskId);
+    const task = await getTaskByIdRepo(taskId, userId);
+
+    if (!task || !validTaskId) {
+      return next(
+        new NotFoundError(
+          "Task not found or you do not have permission to delete it."
+        )
+      );
+    }
+  } catch (error) {
+    return next(
+      new CustomAPIError("Error occurred while deleting the task...")
+    );
+  }
+
+  try {
+    const result = await deleteTaskRepo(taskId, userId);
+
+    res.status(200).json({
+      success: true,
+      msg: result,
+    });
+  } catch (error) {
+    return next(
+      new CustomAPIError("Error occurred while deleting the task...")
+    );
+  }
+};
+
+module.exports = deleteTask;

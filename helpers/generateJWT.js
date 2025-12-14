@@ -16,4 +16,17 @@ const generateRefreshToken = (payload) => {
   return token;
 };
 
-module.exports = { generateAccessToken, generateRefreshToken };
+const generateTokens = (user) => {
+  const payload = {
+    userId: user._id.toString(),
+    name: user.name,
+    email: user.email,
+  };
+
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
+
+  return { accessToken, refreshToken };
+};
+
+module.exports = { generateAccessToken, generateRefreshToken, generateTokens };
