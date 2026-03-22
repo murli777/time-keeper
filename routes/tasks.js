@@ -15,10 +15,12 @@ const {
   validateUpdateTaskBody,
 } = require("../middleware/createTaskValidator");
 
+const validateObjectId = require("../middleware/validateObjectId");
+
 router.get("/", validateFilterBody, getUserTasks);
 router.post("/", validateNewTaskBody, createTask);
-router.get("/:id", getTask);
-router.patch("/:id", validateUpdateTaskBody, updateTask);
-router.delete("/:id", deleteTask);
+router.get("/:id", validateObjectId("id"), getTask);
+router.patch("/:id", validateObjectId("id"), validateUpdateTaskBody, updateTask);
+router.delete("/:id", validateObjectId("id"), deleteTask);
 
 module.exports = router;
